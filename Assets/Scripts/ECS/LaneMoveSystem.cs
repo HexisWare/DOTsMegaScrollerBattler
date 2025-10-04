@@ -3,7 +3,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-[BurstCompile]
+[DisableAutoCreation]
 public partial struct LaneMoveSystem : ISystem
 {
     [BurstCompile]
