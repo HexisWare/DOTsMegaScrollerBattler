@@ -4,10 +4,10 @@ using Unity.Mathematics;
 using Unity.Transforms;
 
 [UpdateInGroup(typeof(SimulationSystemGroup))]
-[UpdateAfter(typeof(ResolveCollisionsSystem))] // move after collisions are resolved
+[UpdateAfter(typeof(ResolveCollisionsSystem))]
 public partial struct SeekOrLaneMoveSystem : ISystem
 {
-    private ComponentLookup<LocalTransform> _xfLookup; // random access to target positions
+    private ComponentLookup<LocalTransform> _xfLookup;
 
     public void OnCreate(ref SystemState s)
     {
@@ -20,16 +20,15 @@ public partial struct SeekOrLaneMoveSystem : ISystem
         _xfLookup.Update(ref s);
         float dt = SystemAPI.Time.DeltaTime;
 
-        // Don't move entities that are flagged as in-collision to avoid tunneling.
         foreach (var (xf, agent, e) in SystemAPI
                      .Query<RefRW<LocalTransform>, RefRO<Agent>>()
-                     .WithNone<InCollisionRange>()
+                     .WithNone<InCollisionRange>()   // your existing no-move-if-colliding tag
+                     .WithNone<Attacking>()          // ← NEW: hold position while attacking
                      .WithEntityAccess())
         {
             float3 pos = xf.ValueRO.Position;
             float3 vel;
 
-            // If we have a target in range, steer toward it. Otherwise, lane move.
             if (SystemAPI.HasComponent<Target>(e))
             {
                 var t = SystemAPI.GetComponentRO<Target>(e).ValueRO.Value;
@@ -40,26 +39,23 @@ public partial struct SeekOrLaneMoveSystem : ISystem
                     float len   = math.length(to);
                     if (len > 1e-5f)
                     {
-                        float3 dir = to / len; // normalized direction to target
+                        float3 dir = to / len;
                         vel = dir * agent.ValueRO.MoveSpeed;
                     }
                     else
                     {
-                        // Fallback to lane direction if we're exactly on top (rare)
                         float dirX = (agent.ValueRO.Faction == Faction.Player) ? 1f : -1f;
                         vel = new float3(dirX * agent.ValueRO.MoveSpeed, 0, 0);
                     }
                 }
                 else
                 {
-                    // Target entity vanished — go lane
                     float dirX = (agent.ValueRO.Faction == Faction.Player) ? 1f : -1f;
                     vel = new float3(dirX * agent.ValueRO.MoveSpeed, 0, 0);
                 }
             }
             else
             {
-                // No target in DetectRange → straight lane travel
                 float dirX = (agent.ValueRO.Faction == Faction.Player) ? 1f : -1f;
                 vel = new float3(dirX * agent.ValueRO.MoveSpeed, 0, 0);
             }

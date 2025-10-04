@@ -5,74 +5,103 @@ using TMPro;
 [RequireComponent(typeof(Button))]
 public class CooldownButton : MonoBehaviour
 {
-    [Tooltip("Optional overlay color while cooling")]
-    public Color overlayColor = new Color(0, 0, 0, 0.35f);
+    [Header("Single TMP text (required)")]
+    [Tooltip("Text that shows the unit ID and, during cooldown, 'ID (seconds)'.")]
+    public TMP_Text text;
 
-    Button _btn;
-    TMP_Text _tmp;
-    Text _legacy;
-    string _baseLabel = "";
-    Image _overlay;
-    float _remain;
-    bool _cooling;
+    [Header("Optional Radial/Linear Fill")]
+    [Tooltip("Image set to Type=Filled. FillAmount animates 1→0 during cooldown.")]
+    public Image cooldownFill;
+
+    [Header("Behavior")]
+    public bool useUnscaledTime = true;
+    public bool showTenths = true; // 0.0 vs whole seconds
+    [Tooltip("Format used during cooldown. {0}=ID, {1}=time string")]
+    public string appendFormat = "{0} ({1})";
+
+    private Button _button;
+    private string _baseLabel = ""; // the ID we always restore to
+
+    private float _timeLeft;
+    private float _duration;
+    private bool _running;
 
     void Awake()
     {
-        _btn = GetComponent<Button>();
-        _tmp = GetComponentInChildren<TMP_Text>(true);
-        _legacy = (_tmp == null) ? GetComponentInChildren<Text>(true) : null;
+        _button = GetComponent<Button>();
 
-        // build a dim overlay (child)
-        var rt = (RectTransform)transform;
-        var overlayGO = new GameObject("CooldownOverlay", typeof(RectTransform), typeof(Image));
-        var ort = overlayGO.GetComponent<RectTransform>();
-        ort.SetParent(rt, false);
-        ort.anchorMin = Vector2.zero; ort.anchorMax = Vector2.one;
-        ort.offsetMin = Vector2.zero; ort.offsetMax = Vector2.zero;
-        _overlay = overlayGO.GetComponent<Image>();
-        _overlay.raycastTarget = false;
-        _overlay.enabled = false;
-        _overlay.color = overlayColor;
+        if (cooldownFill != null && cooldownFill.type != Image.Type.Filled)
+            cooldownFill.type = Image.Type.Filled;
+
+        if (cooldownFill != null) cooldownFill.fillAmount = 0f;
+
+        if (text != null)
+            _baseLabel = text.text ?? "";
     }
 
-    public void SetBaseLabel(string s)
+    /// <summary>Call this once after you set the button text to the unit ID.</summary>
+    public void SetBaseLabel(string id)
     {
-        _baseLabel = s ?? "";
-        if (!_cooling) ApplyLabel(_baseLabel);
+        _baseLabel = id ?? "";
+        if (!_running && text != null) text.text = _baseLabel;
     }
 
-    public void StartCooldown(float seconds)
+    /// <summary>Starts cooldown, disables the button, and appends seconds to the label.</summary>
+    public void Trigger(float seconds)
     {
-        if (seconds <= 0f) return;
-        _remain = seconds;
-        _cooling = true;
-        if (_btn) _btn.interactable = false;
-        if (_overlay) _overlay.enabled = true;
+        _duration = Mathf.Max(0.01f, seconds);
+        _timeLeft = _duration;
+        _running  = true;
+
+        if (_button != null) _button.interactable = false;
+        if (cooldownFill != null) cooldownFill.fillAmount = 1f;
+
+        UpdateVisuals(force: true);
+    }
+
+    /// <summary>Cancels cooldown and restores the label.</summary>
+    public void Cancel()
+    {
+        _running = false;
+        _timeLeft = 0f;
+
+        if (_button != null) _button.interactable = true;
+        if (cooldownFill != null) cooldownFill.fillAmount = 0f;
+        if (text != null) text.text = _baseLabel;
     }
 
     void Update()
     {
-        if (!_cooling) return;
+        if (!_running) return;
 
-        _remain -= Time.unscaledDeltaTime; // UI unaffected by timeScale
-        if (_remain <= 0f)
+        float dt = useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
+        _timeLeft -= dt;
+
+        if (_timeLeft <= 0f)
         {
-            _cooling = false;
-            _remain = 0f;
-            if (_btn) _btn.interactable = true;
-            if (_overlay) _overlay.enabled = false;
-            ApplyLabel(_baseLabel);
+            _running = false;
+            _timeLeft = 0f;
+
+            if (_button != null) _button.interactable = true;
+            if (cooldownFill != null) cooldownFill.fillAmount = 0f;
+            if (text != null) text.text = _baseLabel;
+            return;
         }
-        else
-        {
-            ApplyLabel($"{_baseLabel} ({_remain:0.0}s)");
-        }
+
+        UpdateVisuals();
     }
 
-    void ApplyLabel(string s)
+    private void UpdateVisuals(bool force = false)
     {
-        if (_tmp != null) _tmp.SetText(s);
-        else if (_legacy != null) _legacy.text = s;
-        gameObject.name = $"Btn_{s}";
+        if (cooldownFill != null && _duration > 0f)
+            cooldownFill.fillAmount = Mathf.Clamp01(_timeLeft / _duration);
+
+        if (text == null) return;
+
+        float display = Mathf.Max(0f, _timeLeft);
+        string timeStr = showTenths ? display.ToString("0.0") : Mathf.CeilToInt(display).ToString();
+
+        // ID with appended seconds
+        text.text = string.Format(appendFormat, _baseLabel, timeStr);
     }
 }

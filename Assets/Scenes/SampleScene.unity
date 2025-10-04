@@ -327,7 +327,7 @@ Transform:
   m_GameObject: {fileID: 108872137}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 2, z: 0}
+  m_LocalPosition: {x: -9, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -498,7 +498,7 @@ Transform:
   m_GameObject: {fileID: 302476160}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: -2, z: 0}
+  m_LocalPosition: {x: -9, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -734,6 +734,7 @@ GameObject:
   - component: {fileID: 336634207}
   - component: {fileID: 336634208}
   - component: {fileID: 336634209}
+  - component: {fileID: 336634210}
   m_Layer: 0
   m_Name: Square (3)
   m_TagString: Untagged
@@ -805,7 +806,7 @@ Transform:
   m_GameObject: {fileID: 336634204}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6, y: -2, z: 0}
+  m_LocalPosition: {x: 9, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -864,13 +865,25 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 336634204}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 17b6f58d4e58e6145a4a0464777c4449, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  intervalSeconds: 1.75
-  color: {r: 1, g: 0, b: 0, a: 1}
+  interval: 2
+  enemyColor: {r: 1, g: 0, b: 0, a: 1}
+  enemyCooldown: 2
+  enemyRange: 3
+  enemySpeed: 3
+  enemyDetect: 0.6
+  enemyRadius: 0.15
+  enemyScale: 0.2
+  enemyHP: 3
+  enemyDamage: 1
+  group: 0
+  canAttackGround: 1
+  canAttackAir: 0
+  canAttackOrbital: 0
 --- !u!114 &336634209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -887,6 +900,22 @@ MonoBehaviour:
   mirrorAxisX: 0
   moveMode: 0
   followLerp: 1
+--- !u!114 &336634210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 336634204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01e4bb9ae834fb14aa1fb485f0a572fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lane: 2
+  enemyConfigJson: {fileID: 4900000, guid: abc208a08ee8e3d4f831e55e3f6f2ed5, type: 3}
+  useUnscaledTime: 0
+  fallbackInterval: 1.5
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1226,14 +1255,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04012a0d175978448aa1d606f6ce47aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerConfigJson: {fileID: 4900000, guid: 2e046798932de6141aa96f364a32f0e8, type: 3}
   rowTop: {fileID: 103842160}
   rowMiddle: {fileID: 1747554917}
   rowBottom: {fileID: 1029998706}
-  topLeftBox: {fileID: 108872139}
-  middleLeftBox: {fileID: 1545132302}
-  bottomLeftBox: {fileID: 302476162}
   buttonPrefab: {fileID: 2805371003845192302, guid: c4470aa94a79c2140982b565d9911779, type: 3}
-  configJson: {fileID: 4900000, guid: 2e046798932de6141aa96f364a32f0e8, type: 3}
+  playerTopAnchor: {fileID: 108872139}
+  playerMiddleAnchor: {fileID: 1545132302}
+  playerBottomAnchor: {fileID: 302476162}
 --- !u!1 &849990290
 GameObject:
   m_ObjectHideFlags: 0
@@ -1507,6 +1536,7 @@ GameObject:
   - component: {fileID: 1220698048}
   - component: {fileID: 1220698049}
   - component: {fileID: 1220698050}
+  - component: {fileID: 1220698051}
   m_Layer: 0
   m_Name: Square (5)
   m_TagString: Untagged
@@ -1578,7 +1608,7 @@ Transform:
   m_GameObject: {fileID: 1220698045}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6, y: 2, z: 0}
+  m_LocalPosition: {x: 9, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1637,13 +1667,25 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1220698045}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 17b6f58d4e58e6145a4a0464777c4449, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  intervalSeconds: 1.75
-  color: {r: 1, g: 0, b: 0, a: 1}
+  interval: 2
+  enemyColor: {r: 1, g: 0, b: 0, a: 1}
+  enemyCooldown: 2
+  enemyRange: 3
+  enemySpeed: 3
+  enemyDetect: 0.6
+  enemyRadius: 0.15
+  enemyScale: 0.2
+  enemyHP: 3
+  enemyDamage: 1
+  group: 0
+  canAttackGround: 1
+  canAttackAir: 0
+  canAttackOrbital: 0
 --- !u!114 &1220698050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1660,6 +1702,22 @@ MonoBehaviour:
   mirrorAxisX: 0
   moveMode: 1
   followLerp: 1
+--- !u!114 &1220698051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1220698045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01e4bb9ae834fb14aa1fb485f0a572fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lane: 0
+  enemyConfigJson: {fileID: 4900000, guid: abc208a08ee8e3d4f831e55e3f6f2ed5, type: 3}
+  useUnscaledTime: 0
+  fallbackInterval: 2
 --- !u!1 &1279828188
 GameObject:
   m_ObjectHideFlags: 0
@@ -1752,6 +1810,7 @@ GameObject:
   - component: {fileID: 1490206842}
   - component: {fileID: 1490206843}
   - component: {fileID: 1490206844}
+  - component: {fileID: 1490206845}
   m_Layer: 0
   m_Name: Square (4)
   m_TagString: Untagged
@@ -1823,7 +1882,7 @@ Transform:
   m_GameObject: {fileID: 1490206839}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6, y: 0, z: 0}
+  m_LocalPosition: {x: 9, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1882,13 +1941,25 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1490206839}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 17b6f58d4e58e6145a4a0464777c4449, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  intervalSeconds: 1.75
-  color: {r: 1, g: 0, b: 0, a: 1}
+  interval: 2
+  enemyColor: {r: 1, g: 0, b: 0, a: 1}
+  enemyCooldown: 2
+  enemyRange: 5
+  enemySpeed: 3
+  enemyDetect: 0.6
+  enemyRadius: 0.15
+  enemyScale: 0.2
+  enemyHP: 3
+  enemyDamage: 1
+  group: 0
+  canAttackGround: 1
+  canAttackAir: 0
+  canAttackOrbital: 0
 --- !u!114 &1490206844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1905,6 +1976,22 @@ MonoBehaviour:
   mirrorAxisX: 0
   moveMode: 1
   followLerp: 1
+--- !u!114 &1490206845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1490206839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01e4bb9ae834fb14aa1fb485f0a572fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lane: 1
+  enemyConfigJson: {fileID: 4900000, guid: abc208a08ee8e3d4f831e55e3f6f2ed5, type: 3}
+  useUnscaledTime: 0
+  fallbackInterval: 1
 --- !u!1 &1518238260
 GameObject:
   m_ObjectHideFlags: 0
@@ -1921,7 +2008,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1518238261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2033,7 +2120,7 @@ Transform:
   m_GameObject: {fileID: 1545132300}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 0, z: 0}
+  m_LocalPosition: {x: -9, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2155,6 +2242,11 @@ MonoBehaviour:
   enemySpeed: 6
   detectRange: 0.5
   radius: 0.15
+  projectileSpeed: 14
+  projectileRadius: 0.12
+  projectileLife: 2
+  playerProjectileColor: {r: 0.8, g: 1, b: 1, a: 1}
+  enemyProjectileColor: {r: 1, g: 0.55, b: 0.55, a: 1}
 --- !u!4 &1611988367
 Transform:
   m_ObjectHideFlags: 0

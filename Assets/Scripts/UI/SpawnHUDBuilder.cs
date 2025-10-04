@@ -1,131 +1,136 @@
-using System;
-using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Unity.Mathematics;
 using TMPro;
+using Unity.Mathematics;
 
 public class SpawnHUDBuilder : MonoBehaviour
 {
-    [Header("Row Containers (Horizontal Layout Groups)")]
-    public RectTransform rowTop;
-    public RectTransform rowMiddle;
-    public RectTransform rowBottom;
-
-    [Header("Left Player Boxes (sources)")]
-    public Transform topLeftBox;
-    public Transform middleLeftBox;
-    public Transform bottomLeftBox;
+    [Header("Config")]
+    public TextAsset playerConfigJson; // assign SpawnConfig.json
 
     [Header("UI")]
-    public Button buttonPrefab;     // simple Button with a text child
-    public TextAsset configJson;    // the JSON file above
+    public Transform rowTop;
+    public Transform rowMiddle;
+    public Transform rowBottom;
+    public Button buttonPrefab;
 
-    SpawnSetConfig _config;
+    [Header("Player Box Anchors (world)")]
+    public Transform playerTopAnchor;
+    public Transform playerMiddleAnchor;
+    public Transform playerBottomAnchor;
+
+    // when each button can spawn again (unscaled time)
+    private readonly Dictionary<Button, float> _nextReadyAt = new();
 
     void Start()
     {
-        if (configJson == null) { Debug.LogError("[SpawnHUD] Missing config JSON!"); return; }
-        _config = SpawnConfigLoader.LoadFromText(configJson.text);
-        if (_config == null || _config.boxes == null) { Debug.LogError("[SpawnHUD] Bad JSON"); return; }
-
-        BuildAll();
-    }
-
-    public void Rebuild() // call this if you change JSON at runtime
-    {
-        ClearRow(rowTop);
-        ClearRow(rowMiddle);
-        ClearRow(rowBottom);
-        BuildAll();
-    }
-
-    void BuildAll()
-    {
-        BuildRow("Top",    rowTop,    topLeftBox);
-        BuildRow("Middle", rowMiddle, middleLeftBox);
-        BuildRow("Bottom", rowBottom, bottomLeftBox);
-    }
-
-    void BuildRow(string id, RectTransform row, Transform sourceBox)
-    {
-        if (row == null || sourceBox == null) return;
-
-        var boxCfg = _config.boxes.FirstOrDefault(b => string.Equals(b.id, id, StringComparison.OrdinalIgnoreCase));
-        if (boxCfg == null || boxCfg.spawns == null) return;
-
-        foreach (var def in boxCfg.spawns)
+        if (playerConfigJson == null)
         {
-            if (!def.enabled) continue;
+            Debug.LogError("[SpawnHUDBuilder] No playerConfigJson assigned.");
+            return;
+        }
 
-            var btn = Instantiate(buttonPrefab, row);
-            var display = string.IsNullOrWhiteSpace(def.label) ? def.id : def.label;
-            SetButtonLabel(btn, display);
-            //SetButtonLabel(btn, def.label);
+        var cfg = SpawnConfigLoader.LoadFromText(playerConfigJson.text);
+        if (cfg?.boxes == null || cfg.boxes.Length == 0)
+        {
+            Debug.LogError("[SpawnHUDBuilder] Config has no boxes.");
+            return;
+        }
 
-            // ensure a CooldownButton exists and knows its base label
-            var cd = btn.GetComponent<CooldownButton>();
-            if (cd == null) cd = btn.gameObject.AddComponent<CooldownButton>();
-            cd.SetBaseLabel(display);
-
-            // local copy for closure
-            var defCopy = def;
-            var src = sourceBox;
-
-            // click handler
-            btn.onClick.AddListener(() =>
+        foreach (var box in cfg.boxes)
+        {
+            Transform row = null, anchor = null;
+            switch (box.id.ToLowerInvariant())
             {
-                if (MiniSquareSpawner.Instance == null || src == null) return;
+                case "top":    row = rowTop;    anchor = playerTopAnchor;    break;
+                case "middle": row = rowMiddle; anchor = playerMiddleAnchor; break;
+                case "bottom": row = rowBottom; anchor = playerBottomAnchor; break;
+                default:       row = rowBottom; anchor = playerBottomAnchor; break;
+            }
+            if (row == null || anchor == null)
+            {
+                Debug.LogWarning($"[SpawnHUDBuilder] Missing row/anchor for '{box.id}'. Skipping.");
+                continue;
+            }
 
-                var p = src.position;
-                var color = SpawnConfigLoader.ColorFromHtml(defCopy.color, Color.cyan);
+            var group = SpawnConfigLoader.ParseGroup(box.group);
 
-                float speed  = defCopy.speed       > 0 ? defCopy.speed       : MiniSquareSpawner.Instance.playerSpeed;
-                float detect = defCopy.detectRange > 0 ? defCopy.detectRange : MiniSquareSpawner.Instance.detectRange;
-                float radius = defCopy.radius      > 0 ? defCopy.radius      : MiniSquareSpawner.Instance.radius;
-                float scale  = defCopy.scale       > 0 ? defCopy.scale       : MiniSquareSpawner.Instance.miniScale;
+            if (box.spawns == null) continue;
+            foreach (var def in box.spawns)
+            {
+                if (!def.enabled) continue;
 
-                // spawn
-                MiniSquareSpawner.Instance.SpawnMiniCustom(
-                    new Unity.Mathematics.float3(p.x, p.y, -0.02f),
-                    Faction.Player, color,
-                    speed, detect, radius, scale
-                );
+                var btn   = Instantiate(buttonPrefab, row);
+                var label = btn.GetComponentInChildren<TMP_Text>(true);
+                if (label != null) label.text = def.id; // ← always show ID
 
-                // start cooldown if any
-                if (defCopy.cooldown > 0f) cd.StartCooldown(defCopy.cooldown);
-            });
+                // Wire single-text cooldown component (required for appended seconds)
+                var cool = btn.GetComponent<CooldownButton>();
+                if (cool != null)
+                {
+                    if (cool.text == null && label != null) cool.text = label;
+                    cool.SetBaseLabel(def.id); // cache the ID as base label
+                }
+
+                // capture per-button config
+                var color   = SpawnConfigLoader.ColorFromHtml(def.color, Color.white);
+                var mask    = SpawnConfigLoader.MaskFromStrings(def.canAttack);
+                var speed   = def.speed;
+                var detect  = def.detectRange;                    // Shooter.Range & Agent.DetectRange
+                var rad     = def.radius;
+                var scale   = def.scale;
+                var hp      = Mathf.Max(1, def.hp);
+                var dmg     = Mathf.Max(1, def.damage);
+                var atkCd   = Mathf.Max(0.01f, def.cooldown);     // ATTACK speed
+                var spawnCd = (def.spawnCooldown > 0f) ? def.spawnCooldown : atkCd; // SPAWN cooldown (UI gate)
+
+                _nextReadyAt[btn] = 0f;
+
+                btn.onClick.AddListener(() =>
+                {
+                    if (MiniSquareSpawner.Instance == null) return;
+
+                    float now = Time.unscaledTime;
+                    float readyAt = _nextReadyAt.TryGetValue(btn, out var t) ? t : 0f;
+                    if (now < readyAt) return; // still cooling
+
+                    _nextReadyAt[btn] = now + spawnCd;
+
+                    // Start numeric cooldown on the single TMP text
+                    var cb = btn.GetComponent<CooldownButton>();
+                    if (cb != null) cb.Trigger(spawnCd);
+                    else
+                    {
+                        // Fallback: disable without text countdown (requires CooldownButton to see seconds)
+                        btn.interactable = false;
+                        StartCoroutine(ReenableAfter(btn, spawnCd));
+                    }
+
+                    var p = anchor.position;
+                    MiniSquareSpawner.Instance.SpawnPlayerShooter(
+                        new float3(p.x, p.y, -0.02f),
+                        color,
+                        rangeFromConfig:       detect,
+                        cooldownFromConfig:    atkCd,
+                        speedFromConfig:       speed,
+                        detectRangeFromConfig: detect,
+                        radiusFromConfig:      rad,
+                        hpFromConfig:          hp,
+                        damageFromConfig:      dmg,
+                        group:                 group,
+                        targetMask:            mask,
+                        scaleOverride:         scale
+                    );
+                });
+            }
         }
     }
 
-    static void ClearRow(RectTransform row)
+    private IEnumerator ReenableAfter(Button b, float seconds)
     {
-        for (int i = row.childCount - 1; i >= 0; i--)
-            Destroy(row.GetChild(i).gameObject);
+        yield return new WaitForSecondsRealtime(Mathf.Max(0.01f, seconds));
+        if (b != null) b.interactable = true;
     }
-
-    static void SetButtonLabel(Button b, string label)
-    {
-        // Prefer TMP if present
-        var tmp = b.GetComponentInChildren<TMP_Text>(true);
-        if (tmp != null)
-        {
-            tmp.SetText(label);           // TMP-safe setter
-            b.name = $"Btn_{label}";
-            return;
-        }
-
-        // Fallback: legacy UGUI Text
-        var legacy = b.GetComponentInChildren<Text>(true);
-        if (legacy != null)
-        {
-            legacy.text = label;
-            b.name = $"Btn_{label}";
-            return;
-        }
-
-        Debug.LogWarning($"[SpawnHUD] No TMP_Text or Text found under button '{b.name}'. " +
-                        "Make sure your button prefab has a TMP Text or legacy Text child.");
-    }
-
 }
