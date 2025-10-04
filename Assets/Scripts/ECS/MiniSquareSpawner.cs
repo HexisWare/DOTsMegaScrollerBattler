@@ -107,4 +107,37 @@ public class MiniSquareSpawner : MonoBehaviour
         m.RecalculateBounds();
         return m;
     }
+
+    // MiniSquareSpawner.cs (add inside the class)
+    public void SpawnMiniCustom(float3 pos, Faction faction, Color color,
+                                float speed, float detectRange, float radius,
+                                float? scaleOverride = null)
+    {
+        var e = _em.CreateEntity(_archetype);
+
+        // draw-order nudge (in front of sprites)
+        pos.z = -0.02f;
+        float scale = scaleOverride ?? miniScale;
+
+        _em.SetComponentData(e, LocalTransform.FromPositionRotationScale(pos, quaternion.identity, scale));
+
+        _em.SetComponentData(e, new Agent {
+            Faction = faction,
+            MoveSpeed = speed,
+            DetectRange = detectRange,
+            Radius = radius
+        });
+
+        var lin = color.linear;
+        _em.SetComponentData(e, new URPMaterialPropertyBaseColor {
+            Value = new float4(lin.r, lin.g, lin.b, lin.a)
+        });
+
+        var desc = new RenderMeshDescription(
+            shadowCastingMode: UnityEngine.Rendering.ShadowCastingMode.Off,
+            receiveShadows: false
+        );
+        RenderMeshUtility.AddComponents(e, _em, desc, _rma, _mmi);
+    }
+
 }

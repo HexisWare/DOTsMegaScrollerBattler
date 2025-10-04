@@ -1,0 +1,28 @@
+{
+  "boxes": [
+    {
+      "id": "Top",
+      "spawns": [
+        { "id": "top_striker", "label": "Striker", "enabled": true,  "cooldown": 1.0,  "color": "#00E0FF", "speed": 8.5, "detectRange": 0.7, "radius": 0.16, "scale": 0.20 },
+        { "id": "top_guard",   "label": "Guard",   "enabled": true,  "cooldown": 1.8, "color": "#66D0FF", "speed": 6.0, "detectRange": 0.8, "radius": 0.22, "scale": 0.24 }
+      ]
+    },
+    {
+      "id": "Middle",
+      "spawns": [
+        { "id": "mid_basic",   "label": "Basic",   "enabled": true,  "cooldown": 0.8,  "color": "#00FF88", "speed": 6.5, "detectRange": 0.6, "radius": 0.15, "scale": 0.20 },
+        { "id": "mid_bulky",   "label": "Bulky",   "enabled": true,  "cooldown": 1.1, "color": "#00CC66", "speed": 5.0, "detectRange": 0.7, "radius": 0.24, "scale": 0.26 },
+        { "id": "mid_glass",   "label": "Glass",   "enabled": true,  "cooldown": 1.2, "color": "#66FFBB", "speed": 9.0, "detectRange": 0.6, "radius": 0.12, "scale": 0.18 },
+        { "id": "mid_anchor",  "label": "Anchor",  "enabled": true,  "cooldown": 1.2, "color": "#33AA77", "speed": 4.2, "detectRange": 0.9, "radius": 0.28, "scale": 0.28 }
+      ]
+    },
+    {
+      "id": "Bottom",
+      "spawns": [
+        { "id": "bot_runner",  "label": "Runner",  "enabled": true,  "cooldown": 0.4,  "color": "#FFCC00", "speed": 8.0, "detectRange": 0.6, "radius": 0.15, "scale": 0.20 },
+        { "id": "bot_tank",    "label": "Tank",    "enabled": true,  "cooldown": 2.0, "color": "#FF9900", "speed": 4.8, "detectRange": 0.8, "radius": 0.26, "scale": 0.26 },
+        { "id": "bot_swarm",   "label": "Swarm",   "enabled": true,  "cooldown": 1.0, "color": "#FFE066", "speed": 9.2, "detectRange": 0.5, "radius": 0.12, "scale": 0.16 }
+      ]
+    }
+  ]
+}
