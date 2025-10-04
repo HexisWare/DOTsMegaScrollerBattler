@@ -8,7 +8,7 @@ using Unity.Mathematics;
 public class SpawnHUDBuilder : MonoBehaviour
 {
     [Header("Config")]
-    public TextAsset playerConfigJson; // assign SpawnConfig.json
+    public TextAsset playerConfigJson;
 
     [Header("UI")]
     public Transform rowTop;
@@ -21,11 +21,24 @@ public class SpawnHUDBuilder : MonoBehaviour
     public Transform playerMiddleAnchor;
     public Transform playerBottomAnchor;
 
-    // when each button can spawn again (unscaled time)
+    // cooldown gate per button
     private readonly Dictionary<Button, float> _nextReadyAt = new();
+
+    // per-row state to disable when building is dead
+    private class RowState
+    {
+        public BuildingStatsMono stats;
+        public List<Button> buttons = new List<Button>();
+        public bool disabled;
+    }
+    private RowState _topRow, _midRow, _botRow;
 
     void Start()
     {
+        _topRow = new RowState { stats = playerTopAnchor ? playerTopAnchor.GetComponent<BuildingStatsMono>() : null };
+        _midRow = new RowState { stats = playerMiddleAnchor ? playerMiddleAnchor.GetComponent<BuildingStatsMono>() : null };
+        _botRow = new RowState { stats = playerBottomAnchor ? playerBottomAnchor.GetComponent<BuildingStatsMono>() : null };
+
         if (playerConfigJson == null)
         {
             Debug.LogError("[SpawnHUDBuilder] No playerConfigJson assigned.");
@@ -42,71 +55,64 @@ public class SpawnHUDBuilder : MonoBehaviour
         foreach (var box in cfg.boxes)
         {
             Transform row = null, anchor = null;
+            RowState state = null;
             switch (box.id.ToLowerInvariant())
             {
-                case "top":    row = rowTop;    anchor = playerTopAnchor;    break;
-                case "middle": row = rowMiddle; anchor = playerMiddleAnchor; break;
-                case "bottom": row = rowBottom; anchor = playerBottomAnchor; break;
-                default:       row = rowBottom; anchor = playerBottomAnchor; break;
+                case "top":    row = rowTop;    anchor = playerTopAnchor;    state = _topRow; break;
+                case "middle": row = rowMiddle; anchor = playerMiddleAnchor; state = _midRow; break;
+                case "bottom": row = rowBottom; anchor = playerBottomAnchor; state = _botRow; break;
+                default:       row = rowBottom; anchor = playerBottomAnchor; state = _botRow; break;
             }
-            if (row == null || anchor == null)
-            {
-                Debug.LogWarning($"[SpawnHUDBuilder] Missing row/anchor for '{box.id}'. Skipping.");
-                continue;
-            }
+            if (row == null || anchor == null) { Debug.LogWarning($"[SpawnHUDBuilder] Missing row/anchor for '{box.id}'."); continue; }
 
             var group = SpawnConfigLoader.ParseGroup(box.group);
-
             if (box.spawns == null) continue;
+
             foreach (var def in box.spawns)
             {
                 if (!def.enabled) continue;
 
                 var btn   = Instantiate(buttonPrefab, row);
                 var label = btn.GetComponentInChildren<TMP_Text>(true);
-                if (label != null) label.text = def.id; // ← always show ID
+                if (label != null) label.text = def.id;
 
-                // Wire single-text cooldown component (required for appended seconds)
                 var cool = btn.GetComponent<CooldownButton>();
                 if (cool != null)
                 {
                     if (cool.text == null && label != null) cool.text = label;
-                    cool.SetBaseLabel(def.id); // cache the ID as base label
+                    cool.SetBaseLabel(def.id);
                 }
 
-                // capture per-button config
                 var color   = SpawnConfigLoader.ColorFromHtml(def.color, Color.white);
                 var mask    = SpawnConfigLoader.MaskFromStrings(def.canAttack);
                 var speed   = def.speed;
-                var detect  = def.detectRange;                    // Shooter.Range & Agent.DetectRange
+                var detect  = def.detectRange;
                 var rad     = def.radius;
                 var scale   = def.scale;
                 var hp      = Mathf.Max(1, def.hp);
                 var dmg     = Mathf.Max(1, def.damage);
-                var atkCd   = Mathf.Max(0.01f, def.cooldown);     // ATTACK speed
-                var spawnCd = (def.spawnCooldown > 0f) ? def.spawnCooldown : atkCd; // SPAWN cooldown (UI gate)
+                var atkCd   = Mathf.Max(0.01f, def.cooldown);
+                var spawnCd = (def.spawnCooldown > 0f) ? def.spawnCooldown : atkCd;
 
                 _nextReadyAt[btn] = 0f;
 
                 btn.onClick.AddListener(() =>
                 {
+                    // hard gate: if building is dead, no spawn
+                    var stats = state?.stats;
+                    if (stats != null && stats.currentHP <= 0) return;
+
                     if (MiniSquareSpawner.Instance == null) return;
 
                     float now = Time.unscaledTime;
                     float readyAt = _nextReadyAt.TryGetValue(btn, out var t) ? t : 0f;
-                    if (now < readyAt) return; // still cooling
+                    if (now < readyAt) return;
 
                     _nextReadyAt[btn] = now + spawnCd;
 
-                    // Start numeric cooldown on the single TMP text
                     var cb = btn.GetComponent<CooldownButton>();
                     if (cb != null) cb.Trigger(spawnCd);
-                    else
-                    {
-                        // Fallback: disable without text countdown (requires CooldownButton to see seconds)
-                        btn.interactable = false;
-                        StartCoroutine(ReenableAfter(btn, spawnCd));
-                    }
+                    else { btn.interactable = false; StartCoroutine(ReenableAfter(btn, spawnCd)); }
 
                     var p = anchor.position;
                     MiniSquareSpawner.Instance.SpawnPlayerShooter(
@@ -124,7 +130,37 @@ public class SpawnHUDBuilder : MonoBehaviour
                         scaleOverride:         scale
                     );
                 });
+
+                state.buttons.Add(btn);
             }
+        }
+    }
+
+    void Update()
+    {
+        // If a building dies, disable its row’s buttons
+        DisableRowIfDead(_topRow);
+        DisableRowIfDead(_midRow);
+        DisableRowIfDead(_botRow);
+    }
+
+    private void DisableRowIfDead(RowState rs)
+    {
+        if (rs == null || rs.stats == null) return;
+        if (rs.disabled) return;
+        if (rs.stats.currentHP > 0) return;
+
+        rs.disabled = true;
+        for (int i = 0; i < rs.buttons.Count; i++)
+        {
+            var b = rs.buttons[i];
+            if (b == null) continue;
+            b.interactable = false;
+
+            // Optional: annotate the text to make it obvious
+            var label = b.GetComponentInChildren<TMP_Text>(true);
+            if (label != null && !label.text.EndsWith(" (X)"))
+                label.text = label.text + " (X)";
         }
     }
 
