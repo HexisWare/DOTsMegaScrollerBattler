@@ -33,6 +33,10 @@ public class MiniSquareSpawner : MonoBehaviour
     private MaterialMeshInfo _mmi;
     private EntityArchetype _archetype;
 
+    public Unity.Rendering.RenderMeshArray RMA => _rma;
+    public Unity.Rendering.MaterialMeshInfo MMI => _mmi;
+
+
     void Awake()
     {
         Instance = this;
@@ -177,6 +181,33 @@ public class MiniSquareSpawner : MonoBehaviour
         _em.AddComponentData(e, new ShooterCooldown { TimeLeft = 0f });
         return e;
     }
+
+    // Spawns a projectile entity at 'pos', traveling along 'dir' (should be normalized).
+    public Entity SpawnProjectileFromBuilding(Unity.Mathematics.float3 pos, Unity.Mathematics.float3 dir, Faction faction, float damage, float projectileScale = 0.12f)
+    {
+        var em = _em;
+
+        // Read ProjectileDefaults singleton (created in Awake)
+        var q = em.CreateEntityQuery(ComponentType.ReadOnly<ProjectileDefaults>());
+        var defs = em.GetComponentData<ProjectileDefaults>(q.GetSingletonEntity());
+
+        var p = em.CreateEntity();
+        em.AddComponentData(p, LocalTransform.FromPositionRotationScale(pos, quaternion.identity, projectileScale));
+        em.AddComponentData(p, new Projectile { Faction = faction, Radius = defs.Radius, Damage = damage });
+        em.AddComponentData(p, new Velocity   { Value   = dir * defs.Speed });
+        em.AddComponentData(p, new Lifetime   { Seconds = defs.Life });
+
+        // Projectile color by faction
+        var col = (faction == Faction.Player) ? defs.PlayerColor : defs.EnemyColor;
+        em.AddComponentData(p, new URPMaterialPropertyBaseColor { Value = col });
+
+        // Attach Entities Graphics render bits directly so bullets are visible immediately
+        var desc = new RenderMeshDescription(ShadowCastingMode.Off, receiveShadows: false);
+        RenderMeshUtility.AddComponents(p, em, desc, _rma, _mmi);
+
+        return p;
+    }
+
 
     // -------------------------
     // Helpers

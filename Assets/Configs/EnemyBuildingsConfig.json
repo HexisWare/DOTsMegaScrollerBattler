@@ -1,0 +1,7 @@
+{
+  "boxes": [
+    { "id": "Top",    "group": "Orbital", "hp": 200, "cooldown": 2.0, "shootRange": 9.0, "damage": 2, "canAttack": ["Air","Orbital"] },
+    { "id": "Middle", "group": "Air",     "hp": 200, "cooldown": 2.0, "shootRange": 9.0, "damage": 2, "canAttack": ["Ground","Air","Orbital"] },
+    { "id": "Bottom", "group": "Ground",  "hp": 200, "cooldown": 2.0, "shootRange": 9.0, "damage": 2, "canAttack": ["Ground"] }
+  ]
+}

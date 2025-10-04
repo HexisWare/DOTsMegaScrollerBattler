@@ -1,116 +1,115 @@
-// Assets/Scripts/ECS/ProjectileHitSystem.cs
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-[UpdateInGroup(typeof(SimulationSystemGroup))]
-[UpdateAfter(typeof(ProjectileMoveSystem))]
-[UpdateBefore(typeof(ResolveCollisionsSystem))]
+[BurstCompile]
 public partial struct ProjectileHitSystem : ISystem
 {
-    private ComponentLookup<UnitHealth> _hpLookup; // instance member (not touched by local funcs)
+    private EntityQuery _projQ;
+    private EntityQuery _miniQ;
+    private EntityQuery _bldQ;
 
     public void OnCreate(ref SystemState s)
     {
-        _hpLookup = s.GetComponentLookup<UnitHealth>(false); // read/write
+        _projQ = s.GetEntityQuery(
+            ComponentType.ReadOnly<LocalTransform>(),
+            ComponentType.ReadOnly<Projectile>()
+        );
+
+        _miniQ = s.GetEntityQuery(
+            ComponentType.ReadOnly<LocalTransform>(),
+            ComponentType.ReadOnly<Agent>(),
+            ComponentType.ReadWrite<UnitHealth>() // minis have HP
+        );
+
+        _bldQ = s.GetEntityQuery(
+            ComponentType.ReadOnly<LocalTransform>(),
+            ComponentType.ReadOnly<BuildingTarget>(),
+            ComponentType.ReadOnly<BuildingHitbox>(),
+            ComponentType.ReadOnly<Team>(),
+            ComponentType.ReadWrite<UnitHealth>() // buildings have HP too
+        );
     }
 
     [BurstCompile]
     public void OnUpdate(ref SystemState s)
     {
-        _hpLookup.Update(ref s);
+        var em = s.EntityManager;
 
-        // Make a local copy so our static helper can mutate via ref without touching 'this'
-        var hpLookup = _hpLookup;
+        var projEnts = _projQ.ToEntityArray(Allocator.Temp);
+        var projXfs  = _projQ.ToComponentDataArray<LocalTransform>(Allocator.Temp);
+        var projs    = _projQ.ToComponentDataArray<Projectile>(Allocator.Temp);
 
-        var em  = s.EntityManager;
-        var ecb = new EntityCommandBuffer(Allocator.Temp);
+        var miniEnts = _miniQ.ToEntityArray(Allocator.Temp);
+        var miniXfs  = _miniQ.ToComponentDataArray<LocalTransform>(Allocator.Temp);
+        var miniAgts = _miniQ.ToComponentDataArray<Agent>(Allocator.Temp);
+        var miniHPs  = _miniQ.ToComponentDataArray<UnitHealth>(Allocator.Temp);
 
-        // Spatial grid
-        var gridHandle = s.WorldUnmanaged.GetExistingUnmanagedSystem<BuildSpatialGridSystem>();
-        ref var grid   = ref s.WorldUnmanaged.GetUnsafeSystemRef<BuildSpatialGridSystem>(gridHandle);
-        var map  = grid.Map;
+        var bldEnts  = _bldQ.ToEntityArray(Allocator.Temp);
+        var bldXfs   = _bldQ.ToComponentDataArray<LocalTransform>(Allocator.Temp);
+        var bldHit   = _bldQ.ToComponentDataArray<BuildingHitbox>(Allocator.Temp);
+        var bldTeams = _bldQ.ToComponentDataArray<Team>(Allocator.Temp);
+        var bldHPs   = _bldQ.ToComponentDataArray<UnitHealth>(Allocator.Temp);
 
-        float cell = SystemAPI.GetSingleton<GridParams>().CellSize;
+        var toDestroy = new NativeList<Entity>(Allocator.Temp);
 
-        foreach (var (pxf, proj, e) in SystemAPI
-                     .Query<RefRO<LocalTransform>, RefRO<Projectile>>()
-                     .WithEntityAccess())
+        for (int i = 0; i < projEnts.Length; i++)
         {
-            float3 ppos3   = pxf.ValueRO.Position;
-            float2 ppos    = ppos3.xy;
-            int2 baseCell  = (int2)math.floor(ppos / cell);
-            bool hit       = false;
-            Projectile pd  = proj.ValueRO;
+            var pEnt = projEnts[i];
+            var pXf  = projXfs[i];
+            var p    = projs[i];
 
-            // Scan the 9 neighboring cells
-            ScanCell(map, baseCell + new int2( 0,  0), ppos, pd, ref hit, e, ref ecb, ref hpLookup);
-            ScanCell(map, baseCell + new int2( 1,  0), ppos, pd, ref hit, e, ref ecb, ref hpLookup);
-            ScanCell(map, baseCell + new int2(-1,  0), ppos, pd, ref hit, e, ref ecb, ref hpLookup);
-            ScanCell(map, baseCell + new int2( 0,  1), ppos, pd, ref hit, e, ref ecb, ref hpLookup);
-            ScanCell(map, baseCell + new int2( 0, -1), ppos, pd, ref hit, e, ref ecb, ref hpLookup);
-            ScanCell(map, baseCell + new int2( 1,  1), ppos, pd, ref hit, e, ref ecb, ref hpLookup);
-            ScanCell(map, baseCell + new int2(-1,  1), ppos, pd, ref hit, e, ref ecb, ref hpLookup);
-            ScanCell(map, baseCell + new int2( 1, -1), ppos, pd, ref hit, e, ref ecb, ref hpLookup);
-            ScanCell(map, baseCell + new int2(-1, -1), ppos, pd, ref hit, e, ref ecb, ref hpLookup);
-        }
+            bool killed = false;
 
-        ecb.Playback(em);
-        ecb.Dispose();
-
-        // (No need to assign back to _hpLookup; it’s a handle into ECS data.)
-    }
-
-    // Static helper: no capture of 'this'
-    private static void ScanCell(
-        NativeParallelMultiHashMap<int, BuildSpatialGridSystem.Item> map,
-        int2 cell,
-        float2 projPos,
-        Projectile projData,
-        ref bool hit,
-        Entity projectileEntity,
-        ref EntityCommandBuffer ecb,
-        ref ComponentLookup<UnitHealth> hpLookup)
-    {
-        if (hit) return;
-
-        int key = (cell.x * 73856093) ^ (cell.y * 19349663);
-
-        NativeParallelMultiHashMapIterator<int> it;
-        BuildSpatialGridSystem.Item item;
-        if (!map.TryGetFirstValue(key, out item, out it)) return;
-
-        do
-        {
-            // Only hit opposite faction
-            if (projData.Faction == item.F) continue;
-
-            float2 d = projPos - item.Pos.xy;
-            float  r = projData.Radius + item.Radius;
-
-            if (math.lengthsq(d) <= r * r)
+            // --- Hit minis first (same as before) ---
+            for (int j = 0; j < miniEnts.Length; j++)
             {
-                // Apply damage if UnitHealth exists, otherwise kill
-                if (hpLookup.HasComponent(item.E))
-                {
-                    var hp = hpLookup[item.E];
-                    hp.Value -= projData.Damage;
-                    if (hp.Value <= 0f) ecb.DestroyEntity(item.E);
-                    else hpLookup[item.E] = hp;
-                }
-                else
-                {
-                    ecb.DestroyEntity(item.E);
-                }
+                if (miniAgts[j].Faction == p.Faction) continue; // only hit enemies
 
-                // Destroy projectile on hit
-                ecb.DestroyEntity(projectileEntity);
-                hit = true;
-                return;
+                float r = p.Radius + miniAgts[j].Radius;
+                float r2 = r * r;
+                float2 d = pXf.Position.xy - miniXfs[j].Position.xy;
+                if (math.lengthsq(d) <= r2)
+                {
+                    // damage mini
+                    var hp = miniHPs[j];
+                    hp.Value -= (int)math.round(p.Damage);
+                    em.SetComponentData(miniEnts[j], hp);
+                    toDestroy.Add(pEnt);
+                    killed = true;
+                    break;
+                }
+            }
+            if (killed) continue;
+
+            // --- Hit BUILDINGS ---
+            for (int j = 0; j < bldEnts.Length; j++)
+            {
+                if (bldTeams[j].Value == p.Faction) continue; // only hit enemy buildings
+
+                float r = p.Radius + bldHit[j].Radius;
+                float r2 = r * r;
+                float2 d = pXf.Position.xy - bldXfs[j].Position.xy;
+                if (math.lengthsq(d) <= r2)
+                {
+                    var hp = bldHPs[j];
+                    hp.Value -= (int)math.round(p.Damage);
+                    em.SetComponentData(bldEnts[j], hp);
+                    toDestroy.Add(pEnt);
+                    break;
+                }
             }
         }
-        while (map.TryGetNextValue(out item, ref it));
+
+        // Destroy all projectiles that hit something
+        for (int k = 0; k < toDestroy.Length; k++)
+            if (em.Exists(toDestroy[k])) em.DestroyEntity(toDestroy[k]);
+
+        projEnts.Dispose(); projXfs.Dispose(); projs.Dispose();
+        miniEnts.Dispose(); miniXfs.Dispose(); miniAgts.Dispose(); miniHPs.Dispose();
+        bldEnts.Dispose();  bldXfs.Dispose();  bldHit.Dispose();  bldTeams.Dispose(); bldHPs.Dispose();
+        toDestroy.Dispose();
     }
 }
