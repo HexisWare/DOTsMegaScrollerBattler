@@ -1,0 +1,1027 @@
+fileFormatVersion: 2
+guid: aa056efad1980a042aff24add5af88f1
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1560024024491370824
+    second: bot_swarm_0
+  - first:
+      213: -5629293020729663086
+    second: bot_swarm_1
+  - first:
+      213: -2651205548728949054
+    second: bot_swarm_2
+  - first:
+      213: -8122104292436303813
+    second: bot_swarm_3
+  - first:
+      213: -6925260381894846531
+    second: bot_swarm_4
+  - first:
+      213: -1062650319628618670
+    second: bot_swarm_5
+  - first:
+      213: 5891212742621360374
+    second: bot_swarm_6
+  - first:
+      213: 1550598075389319192
+    second: bot_swarm_7
+  - first:
+      213: 2807499653988577036
+    second: bot_swarm_8
+  - first:
+      213: 8586799974195944142
+    second: bot_swarm_9
+  - first:
+      213: 7669504508920003900
+    second: bot_swarm_10
+  - first:
+      213: 2425079090216285977
+    second: bot_swarm_11
+  - first:
+      213: -5342266128004369862
+    second: bot_swarm_12
+  - first:
+      213: 3844017655126238075
+    second: bot_swarm_13
+  - first:
+      213: -5682957264985950679
+    second: bot_swarm_14
+  - first:
+      213: -7742350006087334706
+    second: bot_swarm_15
+  - first:
+      213: -3972701370264456745
+    second: bot_swarm_16
+  - first:
+      213: 6292145328799298263
+    second: bot_swarm_17
+  - first:
+      213: 4588772839385218564
+    second: bot_swarm_18
+  - first:
+      213: 6472575324283975222
+    second: bot_swarm_19
+  - first:
+      213: 6009974973326771202
+    second: bot_swarm_20
+  - first:
+      213: -5587500337799347441
+    second: bot_swarm_21
+  - first:
+      213: -4535274886641431921
+    second: bot_swarm_22
+  - first:
+      213: 8637361040560874890
+    second: bot_swarm_23
+  - first:
+      213: 6498484395859364098
+    second: bot_swarm_24
+  - first:
+      213: -5473329930737645854
+    second: bot_swarm_25
+  - first:
+      213: -1055259789364873445
+    second: bot_swarm_26
+  - first:
+      213: -2171846918488507591
+    second: bot_swarm_27
+  - first:
+      213: 2182849295880908590
+    second: bot_swarm_28
+  - first:
+      213: -1155802386229315984
+    second: bot_swarm_29
+  - first:
+      213: 2920872059639091052
+    second: bot_swarm_30
+  - first:
+      213: -8126900737457912820
+    second: bot_swarm_31
+  - first:
+      213: 4034299648894925030
+    second: bot_swarm_32
+  - first:
+      213: -906549872891131515
+    second: bot_swarm_33
+  - first:
+      213: 4611989942211773651
+    second: bot_swarm_34
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: bot_swarm_0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 14
+        width: 134
+        height: 212
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84922ecb59156a510800000000000000
+      internalID: 1560024024491370824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_1
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 100
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 291a2daa2dbb0e1b0800000000000000
+      internalID: -5629293020729663086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_2
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 107
+        width: 100
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c66771a996053bd0800000000000000
+      internalID: -2651205548728949054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_3
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 103
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b30a8a4cd2d784f80800000000000000
+      internalID: -8122104292436303813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_4
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 80
+        width: 22
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db75210df5884ef90800000000000000
+      internalID: -6925260381894846531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_5
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 88
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 254b41a1a25b041f0800000000000000
+      internalID: -1062650319628618670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_6
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 35
+        width: 35
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f07334c6cac1c150800000000000000
+      internalID: 5891212742621360374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_7
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 95
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8181cf0fbb4d48510800000000000000
+      internalID: 1550598075389319192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_8
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 78
+        width: 11
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0f650f7f0e36f620800000000000000
+      internalID: 2807499653988577036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_9
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 82
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eca584be4117a2770800000000000000
+      internalID: 8586799974195944142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_10
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 70
+        width: 15
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3dfe6157bd8f6a60800000000000000
+      internalID: 7669504508920003900
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_11
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 70
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 917b19c759c97a120800000000000000
+      internalID: 2425079090216285977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_12
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 60
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a32b2b8d2457cd5b0800000000000000
+      internalID: -5342266128004369862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_13
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 52
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b73212cd0b1b85530800000000000000
+      internalID: 3844017655126238075
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_14
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 38
+        width: 15
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92679c22a741221b0800000000000000
+      internalID: -5682957264985950679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_15
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 55
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec4cb60b0b5ad8490800000000000000
+      internalID: -7742350006087334706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_16
+      rect:
+        serializedVersion: 2
+        x: 217
+        y: 55
+        width: 26
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d1fdaae6212ed8c0800000000000000
+      internalID: -3972701370264456745
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_17
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 30
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d2373ed6d0325750800000000000000
+      internalID: 6292145328799298263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_18
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 40
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40e3486c5989eaf30800000000000000
+      internalID: 4588772839385218564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_19
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 36
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 636b7e9d6f433d950800000000000000
+      internalID: 6472575324283975222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_20
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 32
+        width: 28
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20441226568b76350800000000000000
+      internalID: 6009974973326771202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_21
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 18
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f03481feb063572b0800000000000000
+      internalID: -5587500337799347441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_22
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 23
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8accfef4877f01c0800000000000000
+      internalID: -4535274886641431921
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_23
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 27
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a85ed6b8a121ed770800000000000000
+      internalID: 8637361040560874890
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_24
+      rect:
+        serializedVersion: 2
+        x: 174
+        y: 29
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 209cd99a0214f2a50800000000000000
+      internalID: 6498484395859364098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_25
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 27
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e68edb4d63da04b0800000000000000
+      internalID: -5473329930737645854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_26
+      rect:
+        serializedVersion: 2
+        x: 205
+        y: 22
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b17372500d6fa51f0800000000000000
+      internalID: -1055259789364873445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_27
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 12
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93b37fc0cbc0cd1e0800000000000000
+      internalID: -2171846918488507591
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_28
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 9
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2f613f8ed90b4e10800000000000000
+      internalID: 2182849295880908590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_29
+      rect:
+        serializedVersion: 2
+        x: 113
+        y: 8
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 076b04a7ad3c5ffe0800000000000000
+      internalID: -1155802386229315984
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_30
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 5
+        width: 24
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6fc62da9a5098820800000000000000
+      internalID: 2920872059639091052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_31
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 17
+        width: 15
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0406f266d2773f80800000000000000
+      internalID: -8126900737457912820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_32
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 1
+        width: 41
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e87dd1f726bcf730800000000000000
+      internalID: 4034299648894925030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_33
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 6
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 589062791b94b63f0800000000000000
+      internalID: -906549872891131515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bot_swarm_34
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 6
+        width: 23
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d40535ca64110040800000000000000
+      internalID: 4611989942211773651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      bot_swarm_0: 1560024024491370824
+      bot_swarm_1: -5629293020729663086
+      bot_swarm_10: 7669504508920003900
+      bot_swarm_11: 2425079090216285977
+      bot_swarm_12: -5342266128004369862
+      bot_swarm_13: 3844017655126238075
+      bot_swarm_14: -5682957264985950679
+      bot_swarm_15: -7742350006087334706
+      bot_swarm_16: -3972701370264456745
+      bot_swarm_17: 6292145328799298263
+      bot_swarm_18: 4588772839385218564
+      bot_swarm_19: 6472575324283975222
+      bot_swarm_2: -2651205548728949054
+      bot_swarm_20: 6009974973326771202
+      bot_swarm_21: -5587500337799347441
+      bot_swarm_22: -4535274886641431921
+      bot_swarm_23: 8637361040560874890
+      bot_swarm_24: 6498484395859364098
+      bot_swarm_25: -5473329930737645854
+      bot_swarm_26: -1055259789364873445
+      bot_swarm_27: -2171846918488507591
+      bot_swarm_28: 2182849295880908590
+      bot_swarm_29: -1155802386229315984
+      bot_swarm_3: -8122104292436303813
+      bot_swarm_30: 2920872059639091052
+      bot_swarm_31: -8126900737457912820
+      bot_swarm_32: 4034299648894925030
+      bot_swarm_33: -906549872891131515
+      bot_swarm_34: 4611989942211773651
+      bot_swarm_4: -6925260381894846531
+      bot_swarm_5: -1062650319628618670
+      bot_swarm_6: 5891212742621360374
+      bot_swarm_7: 1550598075389319192
+      bot_swarm_8: 2807499653988577036
+      bot_swarm_9: 8586799974195944142
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

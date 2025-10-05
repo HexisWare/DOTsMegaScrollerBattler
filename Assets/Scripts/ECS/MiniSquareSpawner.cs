@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -10,7 +11,8 @@ public class MiniSquareSpawner : MonoBehaviour
     public static MiniSquareSpawner Instance;
 
     [Header("Visuals")]
-    public Material urpUnlitMaterial;
+    public Material urpUnlitMaterial;            // Fallback (colored quad)
+    public SpriteMaterialRegistry unitRegistry;  // ← assign UnitSpriteMaterialRegistry asset in Inspector
     public float miniScale = 0.20f;
 
     [Header("Agent Defaults")]
@@ -30,12 +32,15 @@ public class MiniSquareSpawner : MonoBehaviour
     private EntityManager _em;
     private Mesh _mesh;
     private RenderMeshArray _rma;
-    private MaterialMeshInfo _mmi;
+    private MaterialMeshInfo _mmiFallback;
     private EntityArchetype _archetype;
 
-    public Unity.Rendering.RenderMeshArray RMA => _rma;
-    public Unity.Rendering.MaterialMeshInfo MMI => _mmi;
+    // registry map: spriteId -> material index (in _rma)
+    private Dictionary<string, int> _matIndexById;
 
+    // expose for other systems that render bullets/bars
+    public RenderMeshArray RMA => _rma;
+    public MaterialMeshInfo MMI => _mmiFallback;
 
     void Awake()
     {
@@ -50,7 +55,7 @@ public class MiniSquareSpawner : MonoBehaviour
             _em.SetComponentData(cfg, new GridParams { CellSize = 0.5f });
         }
 
-        // URP/Unlit material
+        // Fallback URP/Unlit
         if (urpUnlitMaterial == null)
         {
             var shader = Shader.Find("Universal Render Pipeline/Unlit");
@@ -59,12 +64,42 @@ public class MiniSquareSpawner : MonoBehaviour
             urpUnlitMaterial.color = Color.white;
         }
 
-        // Mesh + render descriptors
+        // Mesh (unit quad)
         _mesh = CreateUnitQuad();
-        _rma  = new RenderMeshArray(new[] { urpUnlitMaterial }, new[] { _mesh });
-        _mmi  = MaterialMeshInfo.FromRenderMeshArrayIndices(0, 0);
 
-        // Archetype (include AttackGroup & UnitHealth from the start)
+        // Build materials list: [0]=fallback, then registry entries (if any)
+        var mats = new List<Material>(16) { urpUnlitMaterial };
+        _matIndexById = new Dictionary<string, int>(16, System.StringComparer.Ordinal);
+
+        if (unitRegistry != null)
+        {
+            unitRegistry.InitIfNeeded();
+            if (unitRegistry.entries != null)
+            {
+                for (int i = 0; i < unitRegistry.entries.Length; i++)
+                {
+                    var id  = unitRegistry.entries[i].id ?? "";
+                    var mat = unitRegistry.entries[i].material;
+                    if (string.IsNullOrWhiteSpace(id) || mat == null) continue;
+
+                    // add to array and map the id to this index
+                    int idx = mats.Count;
+                    mats.Add(mat);
+                    _matIndexById[id] = idx;
+                }
+            }
+        }
+
+        // Create RMA with all materials; single shared mesh at index 0
+        _rma = new RenderMeshArray(mats.ToArray(), new[] { _mesh });
+        _mmiFallback = MaterialMeshInfo.FromRenderMeshArrayIndices(0, 0);
+
+        // Debug mapping so you can see what's available
+        Debug.Log($"[MiniSquareSpawner] RMA built. Fallback idx=0. Registry count={_matIndexById.Count}");
+        foreach (var kv in _matIndexById)
+            Debug.Log($"[MiniSquareSpawner] Registry id '{kv.Key}' -> matIndex {kv.Value}");
+
+        // Archetype (include health & group)
         _archetype = _em.CreateArchetype(
             typeof(LocalTransform),
             typeof(LocalToWorld),
@@ -98,29 +133,29 @@ public class MiniSquareSpawner : MonoBehaviour
     }
 
     // -------------------------
-    // Public spawns (fixed signatures)
+    // Public spawns
     // -------------------------
 
-    // Basic convenience: defaults to Ground group & HP=1
+    // Basic convenience: Ground + HP=1
     public void SpawnMini(float3 pos, Faction faction, Color color)
     {
         float speed = (faction == Faction.Player) ? playerSpeed : enemySpeed;
-        SpawnMiniEntityCustom(pos, faction, color, speed, detectRange, radius, 1, GroupKind.Ground, null);
+        SpawnMiniEntityCustom(pos, faction, color, speed, detectRange, radius, 1, GroupKind.Ground, null, null);
     }
 
-    // Convenience with overrides (kept your old call pattern):
-    // NOTE: no 'group' arg here; default to Ground for compatibility
+    // Convenience with overrides (defaults to Ground)
     public void SpawnMiniCustom(float3 pos, Faction faction, Color color,
                                 float speed, float detectRange, float radius,
-                                int hp, float? scaleOverride = null)
+                                int hp, float? scaleOverride = null, string spriteId = null)
     {
-        SpawnMiniEntityCustom(pos, faction, color, speed, detectRange, radius, hp, GroupKind.Ground, scaleOverride);
+        SpawnMiniEntityCustom(pos, faction, color, speed, detectRange, radius, hp, GroupKind.Ground, scaleOverride, spriteId);
     }
 
-    // Core spawner that RETURNS the created entity (now requires GroupKind)
+    // Core spawner (returns the created entity)
     public Entity SpawnMiniEntityCustom(float3 pos, Faction faction, Color color,
                                         float speed, float detectRange, float radius,
-                                        int hp, GroupKind group, float? scaleOverride = null)
+                                        int hp, GroupKind group,
+                                        float? scaleOverride, string spriteId)
     {
         var e = _em.CreateEntity(_archetype);
 
@@ -135,21 +170,37 @@ public class MiniSquareSpawner : MonoBehaviour
         var lin = color.linear;
         _em.SetComponentData(e, new URPMaterialPropertyBaseColor { Value = new float4(lin.r, lin.g, lin.b, lin.a) });
 
+        // choose material index based on spriteId (fallback = 0)
+        var mmi = _mmiFallback;
+        if (!string.IsNullOrEmpty(spriteId))
+        {
+            if (_matIndexById != null && _matIndexById.TryGetValue(spriteId, out int matIndex))
+            {
+                mmi = MaterialMeshInfo.FromRenderMeshArrayIndices(matIndex, 0);
+            }
+            else
+            {
+                Debug.LogWarning($"[MiniSquareSpawner] spriteId '{spriteId}' not found in registry; using fallback material.");
+            }
+            //mmi = MaterialMeshInfo.FromRenderMeshArrayIndices(1, 0);
+        }
+
         var desc = new RenderMeshDescription(ShadowCastingMode.Off, receiveShadows: false);
-        RenderMeshUtility.AddComponents(e, _em, desc, _rma, _mmi);
+        Debug.Log($"[MiniSquareSpawner] Spawning spriteId='{spriteId ?? "<null>"}' → matIndex={(string.IsNullOrEmpty(spriteId) || _matIndexById == null || !_matIndexById.TryGetValue(spriteId, out var idx) ? 0 : idx)}");
+        RenderMeshUtility.AddComponents(e, _em, desc, _rma, mmi);
         return e;
     }
 
-    // PLAYER shooter: now requires group + targetMask
+    // PLAYER shooter
     public Entity SpawnPlayerShooter(float3 pos, Color tint,
                                      float rangeFromConfig, float cooldownFromConfig,
                                      float speedFromConfig, float detectRangeFromConfig, float radiusFromConfig,
                                      int hpFromConfig, int damageFromConfig,
                                      GroupKind group, int targetMask,
-                                     float? scaleOverride = null)
+                                     float? scaleOverride = null, string spriteId = null)
     {
         var e = SpawnMiniEntityCustom(pos, Faction.Player, tint,
-            speedFromConfig, detectRangeFromConfig, radiusFromConfig, hpFromConfig, group, scaleOverride);
+            speedFromConfig, detectRangeFromConfig, radiusFromConfig, hpFromConfig, group, scaleOverride, spriteId);
 
         _em.AddComponentData(e, new Shooter {
             Range        = rangeFromConfig,
@@ -161,16 +212,16 @@ public class MiniSquareSpawner : MonoBehaviour
         return e;
     }
 
-    // ENEMY shooter: requires group + targetMask
+    // ENEMY shooter
     public Entity SpawnEnemyShooter(float3 pos, Color tint,
                                     float range, float cooldown,
                                     float speed, float detectRange, float radius,
                                     int hp, int damage,
                                     GroupKind group, int targetMask,
-                                    float? scaleOverride = null)
+                                    float? scaleOverride = null, string spriteId = null)
     {
         var e = SpawnMiniEntityCustom(pos, Faction.Enemy, tint,
-            speed, detectRange, radius, hp, group, scaleOverride);
+            speed, detectRange, radius, hp, group, scaleOverride, spriteId);
 
         _em.AddComponentData(e, new Shooter {
             Range        = range,
@@ -182,12 +233,11 @@ public class MiniSquareSpawner : MonoBehaviour
         return e;
     }
 
-    // Spawns a projectile entity at 'pos', traveling along 'dir' (should be normalized).
-    public Entity SpawnProjectileFromBuilding(Unity.Mathematics.float3 pos, Unity.Mathematics.float3 dir, Faction faction, float damage, float projectileScale = 0.12f)
+    // Spawns a projectile entity (used by building shooters etc.)
+    public Entity SpawnProjectileFromBuilding(float3 pos, float3 dir, Faction faction, float damage, float projectileScale = 0.12f)
     {
         var em = _em;
 
-        // Read ProjectileDefaults singleton (created in Awake)
         var q = em.CreateEntityQuery(ComponentType.ReadOnly<ProjectileDefaults>());
         var defs = em.GetComponentData<ProjectileDefaults>(q.GetSingletonEntity());
 
@@ -197,21 +247,15 @@ public class MiniSquareSpawner : MonoBehaviour
         em.AddComponentData(p, new Velocity   { Value   = dir * defs.Speed });
         em.AddComponentData(p, new Lifetime   { Seconds = defs.Life });
 
-        // Projectile color by faction
         var col = (faction == Faction.Player) ? defs.PlayerColor : defs.EnemyColor;
         em.AddComponentData(p, new URPMaterialPropertyBaseColor { Value = col });
 
-        // Attach Entities Graphics render bits directly so bullets are visible immediately
         var desc = new RenderMeshDescription(ShadowCastingMode.Off, receiveShadows: false);
-        RenderMeshUtility.AddComponents(p, em, desc, _rma, _mmi);
-
+        RenderMeshUtility.AddComponents(p, em, desc, _rma, _mmiFallback);
         return p;
     }
 
-
-    // -------------------------
     // Helpers
-    // -------------------------
     private static Mesh CreateUnitQuad()
     {
         var m = new Mesh { name = "DOTS_Quad" };

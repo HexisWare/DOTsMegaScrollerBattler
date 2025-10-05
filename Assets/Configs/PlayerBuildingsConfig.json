@@ -1,7 +1,7 @@
 {
   "boxes": [
-    { "id": "Top",    "group": "Orbital", "hp": 2000, "cooldown": 0.2, "moveSpeed": 0.2, "shootRange": 4.0, "damage": 5, "canAttack": ["Air","Orbital"] },
-    { "id": "Middle", "group": "Air",     "hp": 2000, "cooldown": 0.2, "moveSpeed": 0.6, "shootRange": 10.0, "damage": 1, "canAttack": ["Ground","Air","Orbital"] },
-    { "id": "Bottom", "group": "Ground",  "hp": 2000, "cooldown": 0.1, "moveSpeed": 0.4, "shootRange": 7.0, "damage": 3, "canAttack": ["Ground"] }
+    { "id": "Top",  "sprite": "Top_Player",    "group": "Orbital", "hp": 2000, "cooldown": 0.2, "moveSpeed": 0.2, "shootRange": 4.0, "damage": 5, "canAttack": ["Air","Orbital"] },
+    { "id": "Middle",  "sprite": "Middle_Player", "group": "Air",     "hp": 2000, "cooldown": 0.2, "moveSpeed": 0.6, "shootRange": 10.0, "damage": 1, "canAttack": ["Ground","Air","Orbital"] },
+    { "id": "Bottom",  "sprite": "Bottom_Player", "group": "Ground",  "hp": 2000, "cooldown": 0.1, "moveSpeed": 0.4, "shootRange": 7.0, "damage": 3, "canAttack": ["Ground"] }
   ]
 }

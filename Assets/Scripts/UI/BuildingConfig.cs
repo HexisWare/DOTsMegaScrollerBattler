@@ -16,4 +16,6 @@ public class BuildingConfigBox
     public string[] canAttack; // default all groups
 
     public float  moveSpeed;
+
+    public string sprite;
 }

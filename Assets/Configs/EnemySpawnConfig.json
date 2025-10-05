@@ -4,21 +4,21 @@
       "id": "Top",
       "group": "Orbital",
       "spawns": [
-        { "id": "e_top_ray", "label": "Ray", "enabled": true, "cooldown": 1.0, "spawnCooldown": 1.5, "hp": 4, "damage": 1, "color": "#FF7788", "speed": 7.0, "detectRange": 0.8, "radius": 0.16, "scale": 0.20, "canAttack": ["Orbital", "Air"] }
+        { "id": "e_top_ray",  "sprite": "e_top_ray", "label": "Ray", "enabled": true, "cooldown": 1.0, "spawnCooldown": 1.5, "hp": 4, "damage": 1, "color": "#FF7788", "speed": 2.0, "detectRange": 0.8, "radius": 0.16, "scale": 0.20, "canAttack": ["Orbital", "Air"] }
       ]
     },
     {
       "id": "Middle",
       "group": "Air",
       "spawns": [
-        { "id": "e_mid_missile", "label": "Missile", "enabled": true, "cooldown": 1.4, "spawnCooldown": 2.5, "hp": 5, "damage": 2, "color": "#FFAA88", "speed": 6.0, "detectRange": 5.5, "radius": 0.20, "scale": 0.22, "canAttack": ["Ground"] }
+        { "id": "e_mid_missile",  "sprite": "e_mid_missile", "label": "Missile", "enabled": true, "cooldown": 1.4, "spawnCooldown": 2.5, "hp": 5, "damage": 2, "color": "#FFAA88", "speed": 1.0, "detectRange": 5.5, "radius": 0.20, "scale": 0.22, "canAttack": ["Ground"] }
       ]
     },
     {
       "id": "Bottom",
       "group": "Ground",
       "spawns": [
-        { "id": "e_bot_grunt", "label": "Grunt", "enabled": true, "cooldown": 1.2, "spawnCooldown": 1.0, "hp": 4, "damage": 1, "color": "#FFBB44", "speed": 5.5, "detectRange": 2.5, "radius": 0.18, "scale": 0.20, "canAttack": ["Ground", "Air"] }
+        { "id": "e_bot_grunt",  "sprite": "e_bot_grunt", "label": "Grunt", "enabled": true, "cooldown": 1.2, "spawnCooldown": 1.0, "hp": 4, "damage": 1, "color": "#FFBB44", "speed": 1.5, "detectRange": 2.5, "radius": 0.18, "scale": 0.20, "canAttack": ["Ground", "Air"] }
       ]
     }
   ]

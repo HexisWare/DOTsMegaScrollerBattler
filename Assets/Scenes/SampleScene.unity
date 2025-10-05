@@ -453,14 +453,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldCamera: {fileID: 519420031}
-  useSpriteMarker: 1
-  sortingLayerName: Default
-  sortingOrderBehind: -1000
-  markerSize: 0.25
-  markerColor: {r: 1, g: 0.2, b: 0.2, a: 0.95}
+  matchBuildingSorting: 1
+  fallbackSortingLayerName: Default
+  fallbackSortingOrder: 0
   lineThickness: 0.05
   lineColor: {r: 1, g: 0.2, b: 0.2, a: 0.9}
-  zBehind: 0.2
+  zOffset: 0.001
 --- !u!1 &302476160
 GameObject:
   m_ObjectHideFlags: 0
@@ -671,14 +669,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldCamera: {fileID: 519420031}
-  useSpriteMarker: 1
-  sortingLayerName: Default
-  sortingOrderBehind: 0
-  markerSize: 2
-  markerColor: {r: 1, g: 0.2, b: 0.2, a: 0.95}
+  matchBuildingSorting: 1
+  fallbackSortingLayerName: Default
+  fallbackSortingOrder: 0
   lineThickness: 0.05
   lineColor: {r: 1, g: 0.2, b: 0.2, a: 0.9}
-  zBehind: 0.2
+  zOffset: 0.001
 --- !u!1 &325035156
 GameObject:
   m_ObjectHideFlags: 0
@@ -2415,14 +2411,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldCamera: {fileID: 519420031}
-  useSpriteMarker: 1
-  sortingLayerName: Default
-  sortingOrderBehind: -1000
-  markerSize: 0.25
-  markerColor: {r: 1, g: 0.2, b: 0.2, a: 0.95}
+  matchBuildingSorting: 1
+  fallbackSortingLayerName: Default
+  fallbackSortingOrder: 0
   lineThickness: 0.05
   lineColor: {r: 1, g: 0.2, b: 0.2, a: 0.9}
-  zBehind: 0.2
+  zOffset: 0.001
 --- !u!1 &1611988365
 GameObject:
   m_ObjectHideFlags: 0
@@ -2453,6 +2447,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   urpUnlitMaterial: {fileID: 2100000, guid: 82ab716042f68444d8b864d6ea89fe8c, type: 2}
+  unitRegistry: {fileID: 11400000, guid: af63483e57afbb747a5e5264497d5409, type: 2}
   miniScale: 0.2
   playerSpeed: 6
   enemySpeed: 6
@@ -3285,6 +3280,8 @@ MonoBehaviour:
   enemyTop: {fileID: 1220698045}
   enemyMiddle: {fileID: 1490206839}
   enemyBottom: {fileID: 336634204}
+  buildingSpriteRegistry: {fileID: 11400000, guid: 440de1ab36c7a2146a567d4394d55db5, type: 2}
+  buildingFallbackMaterial: {fileID: 2100000, guid: 82ab716042f68444d8b864d6ea89fe8c, type: 2}
   autoAddShooter: 1
   autoAddECSProxy: 1
   defaultBuildingHitRadius: 0.65

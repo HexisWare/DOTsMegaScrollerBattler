@@ -93,6 +93,7 @@ public class SpawnHUDBuilder : MonoBehaviour
                 var dmg     = Mathf.Max(1, def.damage);
                 var atkCd   = Mathf.Max(0.01f, def.cooldown);
                 var spawnCd = (def.spawnCooldown > 0f) ? def.spawnCooldown : atkCd;
+                var spriteId = def.sprite;
 
                 _nextReadyAt[btn] = 0f;
 
@@ -127,7 +128,8 @@ public class SpawnHUDBuilder : MonoBehaviour
                         damageFromConfig:      dmg,
                         group:                 group,
                         targetMask:            mask,
-                        scaleOverride:         scale
+                        scaleOverride:         scale,
+                        spriteId:              spriteId
                     );
                 });
 

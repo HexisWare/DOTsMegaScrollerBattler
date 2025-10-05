@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee5f13afcbeefe488b109e83e86bf7a, type: 3}
+  m_Name: BuildingSpriteRegistry
+  m_EditorClassIdentifier: 
+  entries:
+  - id: Top_Player
+    material: {fileID: 2100000, guid: e5757018aaa50af4ba03f130611385c1, type: 2}
+  - id: Middle_Player
+    material: {fileID: 2100000, guid: fd574b81e1872ad4193d03884d6397f8, type: 2}
+  - id: Bottom_Player
+    material: {fileID: 2100000, guid: ce58c5928e7c41f4493c0e7922a9208a, type: 2}
+  - id: Top_Enemy
+    material: {fileID: 2100000, guid: 1a4549b18b1aa164583fedd4fe47f1d9, type: 2}
+  - id: Middle_Enemy
+    material: {fileID: 2100000, guid: afa33cb126fec2d4c86f1bebbc41d894, type: 2}
+  - id: Bottom_Enemy
+    material: {fileID: 2100000, guid: 77b0ecfe0b31dc1439d14f96b4df4122, type: 2}

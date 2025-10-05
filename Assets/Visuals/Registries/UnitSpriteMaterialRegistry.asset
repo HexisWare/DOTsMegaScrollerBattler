@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1ae01a4602109b48aa6a58be67cb5cd, type: 3}
+  m_Name: UnitSpriteMaterialRegistry
+  m_EditorClassIdentifier: 
+  defaultUnitMaterial: {fileID: 2100000, guid: 82ab716042f68444d8b864d6ea89fe8c, type: 2}
+  entries:
+  - id: top_striker
+    material: {fileID: 2100000, guid: b8b02f26def1df3418a55b1fa15ffced, type: 2}
+  - id: top_guard
+    material: {fileID: 2100000, guid: e2a6519e7d9d7ac4f9f5662672849bed, type: 2}
+  - id: mid_basic
+    material: {fileID: 2100000, guid: bb4dbd3eedb261c4baf502ee3b8a0ea3, type: 2}
+  - id: mid_bulky
+    material: {fileID: 2100000, guid: 6a4cdbb0ff1ab9a42aac5e8c14a86377, type: 2}
+  - id: mid_glass
+    material: {fileID: 2100000, guid: 29d6e16ea602ef14fa92144c28fcb64e, type: 2}
+  - id: mid_anchor
+    material: {fileID: 2100000, guid: cdc195eda4aca2a458ce0af9acd68d9a, type: 2}
+  - id: bot_runner
+    material: {fileID: 2100000, guid: aba5a1f9ea7cc354997a4456e0089d5e, type: 2}
+  - id: bot_tank
+    material: {fileID: 2100000, guid: b55a3f6f70e020b4fa88a569ad9d4d0d, type: 2}
+  - id: bot_swarm
+    material: {fileID: 2100000, guid: 5bb819c17f307e54cba8db0a264fd73c, type: 2}
+  - id: e_top_ray
+    material: {fileID: 2100000, guid: c34c59e49161cb944896e4036bb669fa, type: 2}
+  - id: e_mid_missile
+    material: {fileID: 2100000, guid: 2764315be7a6a8544999c7f8b5477168, type: 2}
+  - id: e_bot_grunt
+    material: {fileID: 2100000, guid: df92adbcee5f109498f882a2a23332ca, type: 2}

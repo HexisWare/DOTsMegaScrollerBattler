@@ -29,6 +29,8 @@ using UnityEngine;
     public int    damage;
 
     public string[] canAttack;   // e.g. ["Ground","Air"]
+
+    public string sprite;
 }
 
 public static class SpawnConfigLoader
