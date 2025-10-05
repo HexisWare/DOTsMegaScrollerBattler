@@ -39,8 +39,8 @@ public partial class HealthBarSetupSystem : SystemBase
             float width  = isBuilding ? math.max(1.2f, radius * 1.8f) : math.max(0.6f, radius * 1.6f);
             float height = isBuilding ? 0.12f : 0.08f;
 
-            // ▼ adjusted offsets:
-            float yoff = isBuilding ? (radius + 0.30f) : (radius + 0.40f);
+            // Offsets: buildings a little closer; minis a little higher
+            float yoff   = isBuilding ? (radius + 0.30f) : (radius + 0.40f);
             var   offset = new float3(0f, yoff, -0.03f);
 
             var bgCol = new float4(0, 0, 0, 0.50f);
@@ -55,6 +55,7 @@ public partial class HealthBarSetupSystem : SystemBase
 
             var desc = new RenderMeshDescription(ShadowCastingMode.Off, receiveShadows: false);
 
+            // ---- BG ----
             em.AddComponentData(bg, new Parent { Value = e });
             em.AddComponentData(bg, LocalTransform.FromPositionRotationScale(offset, quaternion.identity, 1f));
             em.AddComponentData(bg, new LocalToWorld());
@@ -62,6 +63,11 @@ public partial class HealthBarSetupSystem : SystemBase
             RenderMeshUtility.AddComponents(bg, em, desc, sp.RMA, sp.MMI);
             em.AddComponentData(bg, new URPMaterialPropertyBaseColor { Value = bgCol });
 
+            // Hookup: tag the bar and point it at its owner
+            em.AddComponentData(bg, new HealthBarOwner { Owner = e });
+            em.AddComponent<HealthBarElement>(bg);
+
+            // ---- FILL ----
             em.AddComponentData(fill, new Parent { Value = e });
             em.AddComponentData(fill, LocalTransform.FromPositionRotationScale(offset, quaternion.identity, 1f));
             em.AddComponentData(fill, new LocalToWorld());
@@ -69,6 +75,11 @@ public partial class HealthBarSetupSystem : SystemBase
             RenderMeshUtility.AddComponents(fill, em, desc, sp.RMA, sp.MMI);
             em.AddComponentData(fill, new URPMaterialPropertyBaseColor { Value = fgCol });
 
+            // Hookup: tag the bar and point it at its owner
+            em.AddComponentData(fill, new HealthBarOwner { Owner = e });
+            em.AddComponent<HealthBarElement>(fill);
+
+            // Link stored on the OWNER so we can delete both bars on death quickly
             em.AddComponentData(e, new HealthBarChild {
                 Bg     = bg,
                 Fill   = fill,

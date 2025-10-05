@@ -4,7 +4,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 
 [UpdateInGroup(typeof(SimulationSystemGroup))]
-[UpdateAfter(typeof(ResolveCollisionsSystem))]
+[UpdateAfter(typeof(ShootingSystem))]
 public partial struct SeekOrLaneMoveSystem : ISystem
 {
     private ComponentLookup<LocalTransform> _xfLookup;

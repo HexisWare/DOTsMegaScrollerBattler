@@ -14,4 +14,6 @@ public class BuildingConfigBox
     public float  shootRange; // meters (default 7.5)
     public int    damage;     // default 1
     public string[] canAttack; // default all groups
+
+    public float  moveSpeed;
 }

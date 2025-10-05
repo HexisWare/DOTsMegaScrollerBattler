@@ -4,8 +4,8 @@ using UnityEngine;
 public class BuildingConfigApplier : MonoBehaviour
 {
     [Header("JSON")]
-    public TextAsset playerBuildingsJson; // PlayerBuildingsConfig.json
-    public TextAsset enemyBuildingsJson;  // EnemyBuildingsConfig.json
+    public TextAsset playerBuildingsJson;
+    public TextAsset enemyBuildingsJson;
 
     [Header("Scene References")]
     public GameObject playerTop;
@@ -42,9 +42,9 @@ public class BuildingConfigApplier : MonoBehaviour
             return;
         }
 
-        ApplyBoxTo(FindBox(set, "Top"),    top, faction);
-        ApplyBoxTo(FindBox(set, "Middle"), mid, faction);
-        ApplyBoxTo(FindBox(set, "Bottom"), bot, faction);
+        ApplyBoxTo(FindBox(set, "Top"),    top, faction, MovementKind.Free);
+        ApplyBoxTo(FindBox(set, "Middle"), mid, faction, MovementKind.Free);
+        ApplyBoxTo(FindBox(set, "Bottom"), bot, faction, MovementKind.HorizontalOnly);
     }
 
     private static BuildingConfigBox FindBox(BuildingSetConfig set, string id)
@@ -68,7 +68,7 @@ public class BuildingConfigApplier : MonoBehaviour
         return m;
     }
 
-    private void ApplyBoxTo(BuildingConfigBox cfg, GameObject go, Faction faction)
+    private void ApplyBoxTo(BuildingConfigBox cfg, GameObject go, Faction faction, MovementKind movementKind)
     {
         if (cfg == null || go == null) return;
 
@@ -81,7 +81,10 @@ public class BuildingConfigApplier : MonoBehaviour
         stats.ApplyFromConfig(cfg.hp, cfg.cooldown, group, faction,
                               shootRangeOpt: cfg.shootRange,
                               damageOpt:     cfg.damage,
-                              targetMaskOpt: mask);
+                              targetMaskOpt: mask,
+                              moveSpeedOpt:  cfg.moveSpeed);
+
+        stats.movementKind = movementKind;
 
         if (autoAddShooter)
         {
@@ -98,6 +101,10 @@ public class BuildingConfigApplier : MonoBehaviour
             proxy.proxyRadius = defaultBuildingHitRadius;
         }
 
-        Debug.Log($"[BuildingConfigApplier] {faction} {cfg.id} -> HP={cfg.hp}, CD={cfg.cooldown}, Group={cfg.group}", go);
+        // Ensure the mover component exists
+        if (go.GetComponent<BuildingAutoMover>() == null)
+            go.AddComponent<BuildingAutoMover>();
+
+        Debug.Log($"[BuildingConfigApplier] {faction} {cfg.id} -> HP={cfg.hp}, CD={cfg.cooldown}, Move={stats.moveSpeed}, Group={cfg.group}", go);
     }
 }

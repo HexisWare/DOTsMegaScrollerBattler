@@ -4,8 +4,8 @@ using UnityEngine;
 public class BuildingStatsMono : MonoBehaviour
 {
     [Header("Who/What am I")]
-    public Faction   faction = Faction.Player;   // set by loader
-    public GroupKind group   = GroupKind.Ground; // set by loader
+    public Faction   faction = Faction.Player;
+    public GroupKind group   = GroupKind.Ground;
 
     [Header("Stats")]
     public int   maxHP    = 200;
@@ -19,8 +19,16 @@ public class BuildingStatsMono : MonoBehaviour
     public int   damage     = 1;
     public int   targetMask = (1 << (int)GroupKind.Ground) | (1 << (int)GroupKind.Air) | (1 << (int)GroupKind.Orbital);
 
+    [Header("Movement")]
+    public float        moveSpeed = 4f;       // NEW: from config
+    public MovementKind movementKind = MovementKind.Free;
+
+    [HideInInspector] public Vector3 targetPos;  // saved destination
+    [HideInInspector] public bool    hasTarget;  // true if we should move toward targetPos
+
     public void ApplyFromConfig(int hp, float cd, GroupKind g, Faction f,
-                                float shootRangeOpt = 0f, int damageOpt = 0, int targetMaskOpt = 0)
+                                float shootRangeOpt = 0f, int damageOpt = 0, int targetMaskOpt = 0,
+                                float moveSpeedOpt = 0f)
     {
         maxHP     = Mathf.Max(1, hp);
         currentHP = maxHP;
@@ -31,5 +39,6 @@ public class BuildingStatsMono : MonoBehaviour
         if (shootRangeOpt > 0f) shootRange = shootRangeOpt;
         if (damageOpt     > 0)  damage     = damageOpt;
         if (targetMaskOpt > 0)  targetMask = targetMaskOpt;
+        if (moveSpeedOpt  > 0f) moveSpeed  = moveSpeedOpt;
     }
 }

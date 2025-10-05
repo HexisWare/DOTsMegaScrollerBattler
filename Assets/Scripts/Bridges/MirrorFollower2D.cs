@@ -7,28 +7,33 @@ public class MirrorFollower2D : MonoBehaviour
 
     [Header("Mirror Settings")]
     public float mirrorAxisX = 0f; // mirror across x = 0 (the Y axis)
-    public MoveMode2D moveMode = MoveMode2D.Free2D; // match row: Bottom=HorizontalOnly, Mid/Top=Free2D
-    public float followLerp = 1f;  // 1 = snap, <1 = smooth
+    public MoveMode2D moveMode = MoveMode2D.Free2D; // Bottom=HorizontalOnly, Mid/Top=Free2D
+    [Tooltip("1 = snap each frame, <1 = interpolate (0..1).")]
+    public float followLerp = 1f;
 
-    float _lockedY; // for HorizontalOnly
+    private float _lockedY; // for HorizontalOnly
+    private BuildingStatsMono _myStats;
 
     void Awake()
     {
         _lockedY = transform.position.y;
+        _myStats = GetComponent<BuildingStatsMono>();
     }
 
     void LateUpdate()
     {
         if (source == null) return;
 
+        // ❌ If THIS (mirrored) building is dead, do not move it.
+        if (_myStats != null && _myStats.currentHP <= 0)
+            return;
+
         Vector3 s = source.position;
         float mirroredX = mirrorAxisX + (mirrorAxisX - s.x); // 2*axis - x
 
-        Vector3 target;
-        if (moveMode == MoveMode2D.HorizontalOnly)
-            target = new Vector3(mirroredX, _lockedY, 0f);
-        else
-            target = new Vector3(mirroredX, s.y, 0f);
+        Vector3 target = (moveMode == MoveMode2D.HorizontalOnly)
+            ? new Vector3(mirroredX, _lockedY, transform.position.z)
+            : new Vector3(mirroredX, s.y,       transform.position.z);
 
         if (followLerp >= 1f || Time.deltaTime <= 0f)
             transform.position = target;

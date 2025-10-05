@@ -1,31 +1,32 @@
-using Unity.Burst;
-using Unity.Collections;
-using Unity.Entities;
+// using Unity.Burst;
+// using Unity.Collections;
+// using Unity.Entities;
 
-[BurstCompile]
-[UpdateInGroup(typeof(SimulationSystemGroup))]
-[UpdateAfter(typeof(ShootingSystem))]  // make sure this runs after your shooting
-public partial struct AttackingReleaseSystem : ISystem
-{
-    [BurstCompile]
-    public void OnCreate(ref SystemState s) {}
+// [BurstCompile]
+// [UpdateInGroup(typeof(SimulationSystemGroup))]
+// [UpdateAfter(typeof(ShootingSystem))]
+// public partial struct AttackingReleaseSystem : ISystem
+// {
+//     [BurstCompile] public void OnCreate(ref SystemState s) {}
 
-    [BurstCompile]
-    public void OnUpdate(ref SystemState s)
-    {
-        var ecb = new EntityCommandBuffer(Allocator.Temp);
+//     [BurstCompile]
+//     public void OnUpdate(ref SystemState s)
+//     {
+//         var ecb = new EntityCommandBuffer(Allocator.Temp);
 
-        // If you ever add Attacking only when firing, this makes it last just a frame or two.
-        foreach (var (cd, e) in SystemAPI
-                     .Query<RefRO<ShooterCooldown>>()
-                     .WithAll<Attacking>()
-                     .WithEntityAccess())
-        {
-            if (cd.ValueRO.TimeLeft > 0.05f)   // hold pose for ~1-2 frames
-                ecb.RemoveComponent<Attacking>(e);
-        }
+//         // Keep Attacking for a tiny window after a shot so movement visibly pauses.
+//         foreach (var (cd, shooter, e) in SystemAPI
+//                      .Query<RefRO<ShooterCooldown>, RefRO<Shooter>>()
+//                      .WithAll<Attacking>()
+//                      .WithEntityAccess())
+//         {
+//             // Right after firing: cd == FireCooldown. Keep tag for ~0.05s:
+//             // Remove when the remaining cooldown falls below (FireCooldown - 0.05).
+//             if (cd.ValueRO.TimeLeft <= shooter.ValueRO.FireCooldown - 0.05f)
+//                 ecb.RemoveComponent<Attacking>(e);
+//         }
 
-        ecb.Playback(s.EntityManager);
-        ecb.Dispose();
-    }
-}
+//         ecb.Playback(s.EntityManager);
+//         ecb.Dispose();
+//     }
+// }

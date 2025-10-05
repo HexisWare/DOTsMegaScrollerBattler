@@ -257,6 +257,7 @@ GameObject:
   - component: {fileID: 108872141}
   - component: {fileID: 108872142}
   - component: {fileID: 108872143}
+  - component: {fileID: 108872144}
   m_Layer: 0
   m_Name: Square (2)
   m_TagString: Untagged
@@ -400,7 +401,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 108872137}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 060a53e1a914e3b4bbfadd09b4df5f8f, type: 3}
   m_Name: 
@@ -432,6 +433,34 @@ MonoBehaviour:
   maxHP: 200
   currentHP: 200
   cooldown: 2
+  shootRange: 7.5
+  damage: 1
+  targetMask: 7
+  moveSpeed: 4
+  movementKind: 0
+  targetPos: {x: 0, y: 0, z: 0}
+  hasTarget: 0
+--- !u!114 &108872144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 108872137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c90338ca3c864cb47b564a982f7f0ecb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldCamera: {fileID: 519420031}
+  useSpriteMarker: 1
+  sortingLayerName: Default
+  sortingOrderBehind: -1000
+  markerSize: 0.25
+  markerColor: {r: 1, g: 0.2, b: 0.2, a: 0.95}
+  lineThickness: 0.05
+  lineColor: {r: 1, g: 0.2, b: 0.2, a: 0.9}
+  zBehind: 0.2
 --- !u!1 &302476160
 GameObject:
   m_ObjectHideFlags: 0
@@ -446,6 +475,7 @@ GameObject:
   - component: {fileID: 302476164}
   - component: {fileID: 302476165}
   - component: {fileID: 302476166}
+  - component: {fileID: 302476167}
   m_Layer: 0
   m_Name: Square
   m_TagString: Untagged
@@ -589,7 +619,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 302476160}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 060a53e1a914e3b4bbfadd09b4df5f8f, type: 3}
   m_Name: 
@@ -621,6 +651,34 @@ MonoBehaviour:
   maxHP: 200
   currentHP: 200
   cooldown: 2
+  shootRange: 7.5
+  damage: 1
+  targetMask: 7
+  moveSpeed: 4
+  movementKind: 1
+  targetPos: {x: 0, y: 0, z: 0}
+  hasTarget: 0
+--- !u!114 &302476167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302476160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c90338ca3c864cb47b564a982f7f0ecb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldCamera: {fileID: 519420031}
+  useSpriteMarker: 1
+  sortingLayerName: Default
+  sortingOrderBehind: 0
+  markerSize: 2
+  markerColor: {r: 1, g: 0.2, b: 0.2, a: 0.95}
+  lineThickness: 0.05
+  lineColor: {r: 1, g: 0.2, b: 0.2, a: 0.9}
+  zBehind: 0.2
 --- !u!1 &325035156
 GameObject:
   m_ObjectHideFlags: 0
@@ -970,6 +1028,13 @@ MonoBehaviour:
   maxHP: 200
   currentHP: 200
   cooldown: 2
+  shootRange: 7.5
+  damage: 1
+  targetMask: 7
+  moveSpeed: 4
+  movementKind: 0
+  targetPos: {x: 0, y: 0, z: 0}
+  hasTarget: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1790,6 +1855,13 @@ MonoBehaviour:
   maxHP: 200
   currentHP: 200
   cooldown: 2
+  shootRange: 7.5
+  damage: 1
+  targetMask: 7
+  moveSpeed: 4
+  movementKind: 0
+  targetPos: {x: 0, y: 0, z: 0}
+  hasTarget: 0
 --- !u!1 &1279828188
 GameObject:
   m_ObjectHideFlags: 0
@@ -2082,6 +2154,13 @@ MonoBehaviour:
   maxHP: 200
   currentHP: 200
   cooldown: 2
+  shootRange: 7.5
+  damage: 1
+  targetMask: 7
+  moveSpeed: 4
+  movementKind: 0
+  targetPos: {x: 0, y: 0, z: 0}
+  hasTarget: 0
 --- !u!1 &1518238260
 GameObject:
   m_ObjectHideFlags: 0
@@ -2140,6 +2219,7 @@ GameObject:
   - component: {fileID: 1545132304}
   - component: {fileID: 1545132305}
   - component: {fileID: 1545132306}
+  - component: {fileID: 1545132307}
   m_Layer: 0
   m_Name: Square (1)
   m_TagString: Untagged
@@ -2283,7 +2363,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1545132300}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 060a53e1a914e3b4bbfadd09b4df5f8f, type: 3}
   m_Name: 
@@ -2315,6 +2395,34 @@ MonoBehaviour:
   maxHP: 200
   currentHP: 200
   cooldown: 2
+  shootRange: 7.5
+  damage: 1
+  targetMask: 7
+  moveSpeed: 4
+  movementKind: 0
+  targetPos: {x: 0, y: 0, z: 0}
+  hasTarget: 0
+--- !u!114 &1545132307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1545132300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c90338ca3c864cb47b564a982f7f0ecb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldCamera: {fileID: 519420031}
+  useSpriteMarker: 1
+  sortingLayerName: Default
+  sortingOrderBehind: -1000
+  markerSize: 0.25
+  markerColor: {r: 1, g: 0.2, b: 0.2, a: 0.95}
+  lineThickness: 0.05
+  lineColor: {r: 1, g: 0.2, b: 0.2, a: 0.9}
+  zBehind: 0.2
 --- !u!1 &1611988365
 GameObject:
   m_ObjectHideFlags: 0
@@ -3177,6 +3285,9 @@ MonoBehaviour:
   enemyTop: {fileID: 1220698045}
   enemyMiddle: {fileID: 1490206839}
   enemyBottom: {fileID: 336634204}
+  autoAddShooter: 1
+  autoAddECSProxy: 1
+  defaultBuildingHitRadius: 0.65
 --- !u!4 &2138117267
 Transform:
   m_ObjectHideFlags: 0
